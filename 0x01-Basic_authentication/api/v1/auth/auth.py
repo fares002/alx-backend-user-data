@@ -7,7 +7,21 @@ User = TypeVar('User')
 
 
 class Auth:
+    """
+    Auth class provides methods for handling authentication and authorization.
+    """
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
+        """
+        Checks if a path requires authentication based on excluded paths.
+
+        Parameters:
+        - path (str): The path to check.
+        - excluded_paths (List[str]): A list of paths that do not require authentication.
+
+        Returns:
+        - bool: True if the path requires authentication, False otherwise.
+        """
         if not path:
             return True
         if excluded_paths is None or len(excluded_paths) == 0:
@@ -28,15 +42,31 @@ class Auth:
         return True
 
     def authorization_header(self, request=None) -> str:
+        """
+        Retrieves the Authorization header from the request.
+
+        Parameters:
+        - request: The Flask request object.
+
+        Returns:
+        - str: The value of the Authorization header if present, None otherwise.
+        """
         if request is None:
             return None
 
         auth_header = request.headers.get('Authorization')
-
-        if auth_header:
-            return auth_header
-        return None
+        return auth_header
 
     def current_user(self, request=None) -> User:
+        """
+        Retrieves the current user based on the request.
+
+        Parameters:
+        - request: The Flask request object.
+
+        Returns:
+        - User: The current user object if available, None otherwise.
+        """
         if request is None:
             return None
+
