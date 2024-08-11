@@ -14,15 +14,20 @@ class Auth:
         """
         if path is None:
             return True
-
-        if excluded_paths is None or not excluded_paths:
+        if excluded_paths is None or len(excluded_paths) == 0:
             return True
+        normalize_path = path.rstrip('/')
 
         for excluded_path in excluded_paths:
-            if fnmatch.fnmatch(path, excluded_path):
-                return False
+            normalized_excluded_path = excluded_path.rstrip('/')
 
-        return True
+            if normalized_excluded_path.endswith("*"):
+                if normalize_path.startswith(normalized_excluded_path[0:-1]):
+                    return False
+
+            else:
+                if normalize_path == normalized_excluded_path:
+                    return False
 
     def authorization_header(self, request=None) -> str:
         """ Method to get authorization header.
