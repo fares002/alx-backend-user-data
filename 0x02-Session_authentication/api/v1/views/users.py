@@ -131,4 +131,4 @@ def get_current_user():
     """retrive the current authenticated user"""
     if request.current_user is None:
         abort(404)  # No authenticated user, return 404
-    return jsonify(request.current_user.to_dict())
+    return jsonify(request.current_user.to_json())
