@@ -2,6 +2,7 @@
 """Authentication module.
 """
 from typing import List, TypeVar
+import os
 
 
 class Auth:
@@ -61,3 +62,12 @@ class Auth:
         """ Method to get user from request.
         """
         return None
+    
+    def session_cookie(self, request=None):
+        """returns the cookie value from the request"""
+        if request is None:
+            return None
+        
+        session_name = os.getenv('SESSION_NAME', '_my_session_id')
+        
+        return request.cookies.get(session_name)
