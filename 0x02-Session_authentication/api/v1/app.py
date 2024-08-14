@@ -29,6 +29,8 @@ def before_request():
     """
     if auth is None:
         return
+    
+    request.current_user = auth.current_user(request)
 
     excluded_paths = [
         '/api/v1/status/',
