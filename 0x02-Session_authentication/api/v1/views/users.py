@@ -25,14 +25,16 @@ def view_one_user(user_id: str = None) -> str:
       - User object JSON represented
       - 404 if the User ID doesn't exist
     """
+    if user_id is None:
+        abort(404)
     if user_id == 'me':
         if request.current_user is None:
             abort (404)
         return (request.current_user.to_json())
-    if user_id is None:
-        abort(404)
     user = User.get(user_id)
     if user is None:
+        abort(404)
+    if request.current_user is None:
         abort(404)
     return jsonify(user.to_json())
 
@@ -126,9 +128,4 @@ def update_user(user_id: str = None) -> str:
     return jsonify(user.to_json()), 200
 
 
-@app_views.route('/users/me', methods=['GET'], strict_slashes=False)
-def get_current_user():
-    """retrive the current authenticated user"""
-    if request.current_user is None:
-        abort(404)  # No authenticated user, return 404
-    return jsonify(request.current_user.to_json())
+

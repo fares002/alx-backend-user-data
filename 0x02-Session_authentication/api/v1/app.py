@@ -21,7 +21,7 @@ if auth_type == 'auth':
 if auth_type == 'basic_auth':
     auth = BasicAuth()
 if auth_type == 'session_auth':
-    auth == SessionAuth
+    auth == SessionAuth()
 
 
 @app.before_request
@@ -40,9 +40,6 @@ def before_request():
         '/api/v1/forbidden/',
         '/api/v1/auth_session/login/'
         ]
-    
-    if request.path in excluded_paths:
-        return
     
     if auth.require_auth(request.path, excluded_paths):
         if auth.authorization_header(request) is None and auth.session_cookie(request) is None:
@@ -77,4 +74,4 @@ def forbidden_error(error) -> str:
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
-    app.run(host=host, port=port)
+    app.run(host=host, port=port, debug=True)
