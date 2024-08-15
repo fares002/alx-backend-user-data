@@ -10,9 +10,9 @@ class User(Base):
     __tablename__ = 'user'
     """User model"""
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    hased_password = Column(String, nullable=False)
-    session_id = Column(String, nullable=True)
-    reset_token = Column(String, nullable=True)
+    name = Column(String(250), nullable=False)
+    hased_password = Column(String(250), nullable=False)
+    session_id = Column(String(250), nullable=True)
+    reset_token = Column(String(250), nullable=True)
 
     
