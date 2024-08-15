@@ -8,29 +8,31 @@ import os
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def auth_session():
-    """
-    Handle user login
-    Return:
-        dictionary representation of user if found else error message
-    """
+    """Handle user login"""
     email = request.form.get('email')
     password = request.form.get('password')
-    if email is None or email == '':
+
+    if not email:
         return jsonify({"error": "email missing"}), 400
-    if password is None or password == '':
+    if not password:
         return jsonify({"error": "password missing"}), 400
+
     users = User.search({"email": email})
-    if not users or users == []:
+    if not users:
         return jsonify({"error": "no user found for this email"}), 404
-    for user in users:
-        if user.is_valid_password(password):
-            from api.v1.app import auth
-            session_id = auth.create_session(user.id)
-            resp = jsonify(user.to_json())
-            session_name = os.getenv('SESSION_NAME')
-            resp.set_cookie(session_name, session_id)
-            return resp
-    return jsonify({"error": "wrong password"}), 401
+
+    user = users[0]
+    if not user.is_valid_password(password):
+        return jsonify({"error": "wrong password"}), 401
+
+    from api.v1.app import auth  # Import to avoid circular imports
+    session_id = auth.create_session(user.id)
+
+    response = make_response(user.to_json())
+    session_name = os.getenv('SESSION_NAME', '_my_session_id')
+    response.set_cookie(session_name, session_id)
+
+    return response
 
 
 @app_views.route('/auth_session/logout', methods=['DELETE'],
