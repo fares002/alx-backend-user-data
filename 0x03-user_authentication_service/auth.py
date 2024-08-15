@@ -9,6 +9,7 @@ from uuid import uuid4
 from sqlalchemy.orm.exc import NoResultFound
 
 
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -32,6 +33,19 @@ class Auth:
             return user
         else:
             raise ValueError(f"User {email} already exists")
+    
+    def valid_login(self, email: str, password: str) -> bool:
+        """Credentials validation"""
+        db = self._db
+        try:
+            user  = db.find_user_by(email=email)
+        except NoResultFound:
+            return False
+        
+        if bcrypt.checkpw(password.encode('utf-8'), user.hashed_password):
+            return True
+        else:
+            return False
 
 def _hash_password(password: str) -> bytes:
     """ Creates password hash

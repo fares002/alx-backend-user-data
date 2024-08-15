@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request
 from auth import Auth
 
 
-app = Flask(__name__)
+app = Flask(__name__, lazy_loding = True)
 AUTH = Auth()
 
 @app.route("/")
