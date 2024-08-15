@@ -45,4 +45,3 @@ def handle_logout():
     if auth.destroy_session(request):
         return jsonify({}), 200
     abort(404)
- 
