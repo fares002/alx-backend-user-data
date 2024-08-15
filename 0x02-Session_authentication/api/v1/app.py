@@ -5,23 +5,24 @@ Route module for the API
 from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
-from flask_cors import (CORS)
-from api.v1.auth.auth import Auth
-from api.v1.auth.basic_auth import BasicAuth
-from api.v1.auth.session_auth import SessionAuth
+from flask_cors import (CORS,cross_origin)
+
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
-
 auth = None
-auth_type = getenv('AUTH_TYPE', 'auth')
-if auth_type == 'auth':
+AUTH_TYPE = getenv("AUTH_TYPE")
+
+if AUTH_TYPE == "auth":
+    from api.v1.auth.auth import Auth
     auth = Auth()
-if auth_type == 'basic_auth':
+elif AUTH_TYPE == "basic_auth":
+    from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
-if auth_type == 'session_auth':
-    auth == SessionAuth()
+elif AUTH_TYPE == "session_auth":
+    from api.v1.auth.session_auth import SessionAuth
+    auth = SessionAuth()
 
 
 @app.before_request
@@ -32,7 +33,6 @@ def before_req():
     if auth is None:
         return
     
-    request.current_user = auth.current_user(request)
 
     excluded_paths = [
         '/api/v1/status/',
@@ -46,7 +46,7 @@ def before_req():
             abort(401)  # Unauthorized
         if auth.current_user(request) is None:
             abort(403)  # Forbidden
-
+    request.current_user = auth.current_user(request)
 
 @app.errorhandler(404)
 def not_found(error) -> str:

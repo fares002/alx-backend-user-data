@@ -29,8 +29,8 @@ def auth_session():
     session_id = auth.create_session(user.id)
 
     response = make_response(user.to_json())
-    session_name = os.getenv('SESSION_NAME', '_my_session_id')
-    response.set_cookie(session_name, session_id)
+    SESSION_NAME= os.getenv('SESSION_NAME', '_my_session_id')
+    response.set_cookie(SESSION_NAME, session_id)
 
     return response
 
