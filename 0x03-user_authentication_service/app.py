@@ -7,6 +7,7 @@ from auth import Auth
 app = Flask(__name__)
 AUTH = Auth()
 
+
 @app.route('/')
 def home():
     """return {"message": "Bienvenue"}"""
