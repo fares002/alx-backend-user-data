@@ -9,3 +9,4 @@ from api.v1.views.index import *
 from api.v1.views.users import *
 
 User.load_from_file()
+session_auth= Blueprint('session_auth', __name__, url_prefix="/api/v1")
