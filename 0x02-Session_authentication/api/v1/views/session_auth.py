@@ -29,7 +29,7 @@ def auth_session():
     session_id = auth.create_session(user.id)
 
     response = make_response(user.to_json())
-    SESSION_NAME= os.getenv('SESSION_NAME', '_my_session_id')
+    SESSION_NAME = os.getenv('SESSION_NAME', '_my_session_id')
     response.set_cookie(SESSION_NAME, session_id)
 
     return response
@@ -45,6 +45,4 @@ def handle_logout():
     if auth.destroy_session(request):
         return jsonify({}), 200
     abort(404)
-
-
-        
+ 
