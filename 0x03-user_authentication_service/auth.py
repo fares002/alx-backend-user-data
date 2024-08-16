@@ -77,7 +77,7 @@ class Auth:
         """
         db = self._db
         db.update_user(user_id, session_id=None)
-    
+
     def get_reset_password_token(self, email: str) -> str:
         """ generate a UUID and update the user
             reset_token database field
