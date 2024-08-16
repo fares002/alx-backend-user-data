@@ -79,7 +79,7 @@ class Auth:
         db.update_user(user_id, session_id=None)
     
     def get_reset_password_token(self, email: str) -> str:
-        """ generate a UUID and update the user’s 
+        """ generate a UUID and update the user
             reset_token database field
 
         Args:
@@ -92,7 +92,7 @@ class Auth:
         try:
             user = db.find_user_by(email=email)
         except NoResultFound:
-            return None
+            raise ValueError
         reset_token = _generate_uuid()
         db.update_user(user.id, reset_token=reset_token)
         return reset_token
