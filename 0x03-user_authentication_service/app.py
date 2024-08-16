@@ -88,7 +88,7 @@ def rest_password():
 
 
 @app.route("/reset_password", methods=["PUT"])
-def update_password():
+def update_password() -> str:
     """ Password update endpoint
         Form fields:
             - email

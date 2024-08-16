@@ -1,54 +1,86 @@
 #!/usr/bin/env python3
-"""final test"""
+"""Final test"""
 
 import requests
 
 BASE_URL = "http://localhost:5000"
 
 def register_user(email: str, password: str) -> None:
-    """ Register a new user """
-    response = requests.post(f"{BASE_URL}/users", data={"email": email, "password": password})
+    """Register a new user"""
+    response = requests.post(
+        f"{BASE_URL}/users", 
+        data={"email": email, "password": password}
+    )
     assert response.status_code == 200
-    assert response.json() == {"email": email, "message": "user created"}
+    assert response.json() == {
+        "email": email, 
+        "message": "user created"
+    }
 
 def log_in_wrong_password(email: str, password: str) -> None:
-    """ Attempt to log in with the wrong password """
-    response = requests.post(f"{BASE_URL}/sessions", data={"email": email, "password": password})
+    """Attempt to log in with the wrong password"""
+    response = requests.post(
+        f"{BASE_URL}/sessions", 
+        data={"email": email, "password": password}
+    )
     assert response.status_code == 401
 
 def log_in(email: str, password: str) -> str:
-    """ Log in with correct credentials and return the session ID """
-    response = requests.post(f"{BASE_URL}/sessions", data={"email": email, "password": password})
+    """Log in with correct credentials and return the session ID"""
+    response = requests.post(
+        f"{BASE_URL}/sessions", 
+        data={"email": email, "password": password}
+    )
     assert response.status_code == 200
     assert "session_id" in response.cookies
     return response.cookies["session_id"]
 
 def profile_unlogged() -> None:
-    """ Attempt to access profile without logging in """
+    """Attempt to access profile without logging in"""
     response = requests.get(f"{BASE_URL}/profile")
     assert response.status_code == 403
 
 def profile_logged(session_id: str) -> None:
-    """ Access profile with a valid session ID """
-    response = requests.get(f"{BASE_URL}/profile", cookies={"session_id": session_id})
+    """Access profile with a valid session ID"""
+    response = requests.get(
+        f"{BASE_URL}/profile", 
+        cookies={"session_id": session_id}
+    )
     assert response.status_code == 200
     assert response.json() == {"email": "guillaume@holberton.io"}
 
 def log_out(session_id: str) -> None:
-    """ Log out with a valid session ID """
-    response = requests.delete(f"{BASE_URL}/sessions", cookies={"session_id": session_id})
+    """Log out with a valid session ID"""
+    response = requests.delete(
+        f"{BASE_URL}/sessions", 
+        cookies={"session_id": session_id}
+    )
     assert response.status_code == 302  # Redirect status code
 
 def reset_password_token(email: str) -> str:
-    """ Request a password reset token """
-    response = requests.post(f"{BASE_URL}/reset_password", data={"email": email})
+    """Request a password reset token"""
+    response = requests.post(
+        f"{BASE_URL}/reset_password", 
+        data={"email": email}
+    )
     assert response.status_code == 200
     assert "reset_token" in response.json()
     return response.json()["reset_token"]
 
-def update_password(email: str, reset_token: str, new_password: str) -> None:
-    """ Update the password using the reset token """
-    response = requests.put(f"{BASE_URL}/reset_password", data={"email": email, "reset_token": reset_token, "new_password": new_password})
+def update_password(
+    email: str, 
+    reset_token: str, 
+    new_password: str
+) -> None:
+    """Update the password using the reset token"""
+    response = requests.put(
+        f"{BASE_URL}/reset_password", 
+        data={
+            "email": email, 
+            "reset_token": reset_token, 
+            "new_password": new_password
+        }
+    )
     assert response.status_code == 200
 
 EMAIL = "guillaume@holberton.io"
