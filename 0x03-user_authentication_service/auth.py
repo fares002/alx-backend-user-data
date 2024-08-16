@@ -81,10 +81,8 @@ class Auth:
     def get_reset_password_token(self, email: str) -> str:
         """ generate a UUID and update the user
             reset_token database field
-
         Args:
             email (str): user email
-
         Returns:
             str: token
         """
@@ -96,6 +94,22 @@ class Auth:
         reset_token = _generate_uuid()
         db.update_user(user.id, reset_token=reset_token)
         return reset_token
+    
+    def update_password(self, reset_token: str, password: str) -> None:
+        """ Update password for user with matching reset token
+            Args:
+                - reset_toke: user's reset token
+                - password: new password
+            Return:
+                - None
+        """
+        db = self._db
+        try:
+            user = db.find_user_by(reset_token=reset_token)
+        except NoResultFound:
+            raise ValueError
+        db.update_user(user.id, hashed_password=_hash_password(password),
+                       reset_token=None)
 
 
 def _hash_password(password: str) -> bytes:
