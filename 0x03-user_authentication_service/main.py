@@ -76,16 +76,16 @@ def reset_password_token(email: str) -> str:
 
 
 def update_password(
-    email: str, 
-    reset_token: str, 
+    email: str,
+    reset_token: str,
     new_password: str
 ) -> None:
     """Update the password using the reset token"""
     response = requests.put(
         f"{BASE_URL}/reset_password",
         data={
-            "email": email, 
-            "reset_token": reset_token, 
+            "email": email,
+            "reset_token": reset_token,
             "new_password": new_password
         }
     )
