@@ -12,9 +12,4 @@ from auth import Auth
 auth = Auth()
 
 auth = Auth()
-email = "test@example.com"
-password = "test123"
-if auth.valid_login(email=email, password=password):
-    print("Login Successful")
-else:
-    print("Login Failed")
+resettoken = auth.get_reset_password_token(email="faresosama002@gmail.com")
