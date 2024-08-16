@@ -38,9 +38,11 @@ def login() -> Response:
     """
     email = request.form.get("email")
     password = request.form.get("password")
-    if not Auth.valid_login(email, password):
+    if not email or not password:
         abort(401)
-    session_id = Auth.create_session(email)
+    if not AUTH.valid_login(email=email, password=password):
+        abort(401)
+    session_id = AUTH.create_session(email)
     reponse = jsonify({"email": email, "message": "logged in"})
     reponse.set_cookie("session_id", session_id)
     return reponse
@@ -53,22 +55,22 @@ def logout():
             - redirect to the home page
     """
     session_id = request.cookies.get("session_id")
-    user = Auth.get_user_from_session_id(session_id)
+    user = AUTH.get_user_from_session_id(session_id)
     if not user:
         abort(403)
-    Auth.destroy_session(user.id)
+    AUTH.destroy_session(user.id)
     return redirect(url_for("home"))
 
 
 @app.route('/profile', methods=['GET'])
-def profile():
+def profile() -> str:
     """ User profile endpoint
         Return:
             - user email JSON represented
             - 403 if session_id is not linked to any user
     """
     session_id = request.cookies.get("session_id")
-    user = Auth.get_user_from_session_id(session_id)
+    user = AUTH.get_user_from_session_id(session_id)
     if not user:
         abort(403)
     return jsonify({"email": user.email}), 200
