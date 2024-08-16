@@ -68,6 +68,16 @@ class Auth:
             return None
         return user
 
+    def destroy_session(self, user_id: int) -> None:
+        """destroy the user session
+        Args:
+            user_id: current user_id
+        return:
+            None
+        """
+        db = self._db
+        db.update_user(user_id, session_id=None)
+
 
 def _hash_password(password: str) -> bytes:
     """ Creates password hash
