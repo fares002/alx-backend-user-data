@@ -83,7 +83,7 @@ def rest_password():
     try:
         reset_token = AUTH.get_reset_password_token(email)
     except ValueError:
-        abort(403)    
+        abort(403)
     return jsonify({"email": email, "reset_token": reset_token})
 
 
