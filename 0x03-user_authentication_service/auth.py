@@ -45,7 +45,7 @@ class Auth:
             return True
         else:
             return False
-        
+  
     def create_session(self, email: str) -> str:
         """Creat session for the user"""
         db = self._db
