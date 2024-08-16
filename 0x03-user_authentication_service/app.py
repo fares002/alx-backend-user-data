@@ -76,7 +76,7 @@ def profile() -> str:
     return jsonify({"email": user.email}), 200
 
 
-@app.route('/reset_password', mesthods=['POST'])
+@app.route('/reset_password', methods=['POST'])
 def rest_password():
     """rest password endpoint"""
     email = request.form.get("email")
